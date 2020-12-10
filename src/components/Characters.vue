@@ -27,52 +27,29 @@
 </template>
 <script>
 
-import {public_key,secret_key} from "../marvel"
-
-//Put in the above url the secret key//
-import axios from 'axios'
-import MD5 from "crypto-js/md5";
-
+import {mapState} from "vuex";
 
 export default {
     data(){
+        
         return {
-
-            characters: [],
-            timestamp: 1,
             variant_name: "portrait_xlarge"
-            
         }
     },
+
     created(){
-        
-        this.fetchCharacters();
-        
-    },
-    methods: {
 
-        fetchCharacters()  {
-            var hash = this.createHash();
-           // console.log(hash);
-            
-            axios.get("http://gateway.marvel.com/v1/public/characters?ts=" + this.timestamp + "&apikey=" + public_key + "&hash=" + hash)
-            .then((result) => {
-               console.log(result.data.data.results);
-               this.characters =  result.data.data.results;
-            })
-            .catch((error) =>{
-                console.log(error);
-            }); 
-            
-        },
-
-        createHash() {
-           
-            var hash = MD5(this.timestamp + secret_key + public_key).toString();
-         
-            return hash;
-        }
+        this.$store.dispatch('fetchCharacters')
+    
     },
+
+    computed: {
+        ...mapState({
+            characters: state => state.characters
+        })
+    }
+  
+    
 
     
 }
