@@ -105,25 +105,35 @@
     
 </template>
 <script>
-import axios from 'axios'
-import {public_key,secret_key} from "../marvel"
-import MD5 from "crypto-js/md5";
-
-export default {
+/*import axios from 'axios'
+  import {public_key,secret_key} from "../marvel"
+  import MD5 from "crypto-js/md5"; */
+  import {mapState} from "vuex"
+  export default {
     data(){
+        
         return {
-              character: Object,
-              timestamp: 1,
-              variant_name: "portrait_xlarge"
+         //     character: Object,
+         //     timestamp: 1,
+                variant_name: "portrait_xlarge"
+
         }
     },
 
     created(){
-        this.fetchCharacter();
+      //  this.fetchCharacter();
+          this.$store.dispatch('fetchCharacter',this.$route.params.id);
+
+    },
+
+    computed: {
+        ...mapState({
+            character: state => state.character
+        })
     },
 
     methods: {
-        fetchCharacter: function(){
+      /*  fetchCharacter: function(){
             var hash = this.createHash();
             axios.get("http://gateway.marvel.com/v1/public/characters/" + this.$route.params.id +  "?ts=" + this.timestamp + "&apikey=" + public_key + "&hash=" + hash)    
             .then((result) => {
@@ -143,7 +153,7 @@ export default {
          
             return hash;
         }
-         
+      */  
     }
 }
 </script>

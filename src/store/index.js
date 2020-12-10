@@ -21,14 +21,17 @@ export default new Vuex.Store({
 
     async fetchCharacters({commit}){
         commit('fetchCharacters');
-    }
+    },
 
+    async fetchCharacter({commit},id) {
+        commit('fetchCharacter',id);
+    }
   },
   mutations: {
-     fetchCharacters(state){
+    fetchCharacters(state){
         
         var hash = createHash(state.timestamp);
-        console.log(hash);
+
         axios.get("http://gateway.marvel.com/v1/public/characters?ts=" + state.timestamp + "&apikey=" + public_key + "&hash=" + hash)
         .then((result) => {
             state.characters =  result.data.data.results;
@@ -36,7 +39,22 @@ export default new Vuex.Store({
         .catch((error) =>{
             console.log(error);
         }); 
-     }
+    },
+
+    fetchCharacter(state,id) {
+       var hash = createHash(state.timestamp);
+       
+       axios.get("http://gateway.marvel.com/v1/public/characters/" + id +  "?ts=" + state.timestamp + "&apikey=" + public_key + "&hash=" + hash)    
+            .then((result) => {
+               console.log(result.data.data.results[0]);
+               state.character = result.data.data.results[0];
+            
+            })
+            .catch((error) =>{
+                console.log(error);
+        });
+       
+    }
   },
   
   modules: {
