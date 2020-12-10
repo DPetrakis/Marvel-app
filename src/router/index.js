@@ -3,6 +3,9 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Character from "../components/Character.vue";
 import NotFound from "../components/NotFound.vue";
+import Comics from "../components/Comics.vue";
+import Comic from "../components/Comic.vue";
+
 
 Vue.use(VueRouter);
 
@@ -25,6 +28,16 @@ const routes = [
     path: "/character/:id",
     name: "Character",
     component: Character
+  },
+  {
+    path: "/comics",
+    name: "Comics",
+    component: Comics
+  },
+  {
+    path: "/comic/:id",
+    name: "Comic",
+    component: Comic
   },
   {
     path: "*",

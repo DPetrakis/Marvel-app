@@ -1,6 +1,5 @@
 <template>
-
-    <div>
+      <div>
 
         <div class="container">
         <div class="main-body">
@@ -12,11 +11,11 @@
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
-                    <img v-bind:src="character.thumbnail.path + '/' + variant_name + '.' + character.thumbnail.extension" alt="Admin" class="rounded-circle" width="150">
+                    <img v-bind:src="comic.thumbnail.path + '/' + variant_name + '.' + comic.thumbnail.extension" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>{{character.name}}</h4>
-                      <p class="text-secondary mb-1">{{character.description}}</p>
-                      <p class="text-muted font-size-sm">Modified: {{character.modified}}</p>
+                      <h4>{{comic.title}}</h4>
+                      <p class="text-secondary mb-1">{{comic.description}}</p>
+                      <p class="text-muted font-size-sm"></p>
                       <button class="btn btn-primary">Follow</button>
                       <button class="btn btn-outline-primary">Message</button>
                     </div>
@@ -57,13 +56,15 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Series</i></h6>
+                        <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Characters</i></h6>
                             
-                            <ul class="list-group list-group-flush" v-if="character.series.items.length">
-                            <li class="list-group-item" v-for="serie in character.series.items" v-bind:key="serie.id">{{serie.name}}</li>
+                            <ul class="list-group list-group-flush" v-if="comic.characters.items.length">
+                             <li class="list-group-item" v-for="character in comic.characters.items" v-bind:key="character.id">
+                                 {{character.name}}
+                             </li>
                             </ul>
                             <p v-else>
-                                No series for this character yet
+                                There are no characters for this comic
                             </p>
                       
                     </div>
@@ -72,12 +73,14 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Events</i></h6>
-                            <ul class="list-group list-group-flush" v-if="character.events.items.length">
-                            <li class="list-group-item" v-for="event in character.events.items" v-bind:key="event.id">{{event.name}}</li>
+                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Stories</i></h6>
+                            <ul class="list-group list-group-flush" v-if="comic.stories.items.length">
+                              <li class="list-group-item" v-for="storie in comic.stories.items" v-bind:key="storie.id">
+                                  {{storie.name}}
+                              </li>
                             </ul>
                             <p v-else>
-                                No events for this character yet
+                                No stories for this comic yet
                             </p>
                     </div>
                   </div>
@@ -85,12 +88,14 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Stories</i></h6>
-                            <ul class="list-group list-group-flush" v-if="character.stories.items.length">
-                            <li class="list-group-item" v-for="storie in character.stories.items" v-bind:key="storie.id">{{storie.name}}</li>
+                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Creators</i></h6>
+                            <ul class="list-group list-group-flush" v-if="comic.creators.items.length">
+                            <li class="list-group-item" v-for="creator in comic.creators.items" v-bind:key="creator.id">
+                               {{creator.name}} <small class="creator-role">{{creator.role}}</small>
+                            </li>
                             </ul>
                             <p v-else>
-                                No stories for this character yet
+                                No creators available
                             </p>
                     </div>
                   </div>
@@ -102,30 +107,26 @@
     </div>
 
     </div>
-    
 </template>
 <script>
+import {mapState} from 'vuex'
 
-  import {mapState} from "vuex"
-  export default {
+export default {
     data(){
-        
         return {
-         
-                variant_name: "portrait_xlarge"
-
+            variant_name: "portrait_xlarge"
         }
     },
-
+    
     created(){
       
-          this.$store.dispatch('fetchCharacter',this.$route.params.id);
+          this.$store.dispatch('fetchComic',this.$route.params.id);
 
     },
 
     computed: {
         ...mapState({
-            character: state => state.character
+            comic: state => state.comic
         })
     },
 
@@ -135,7 +136,11 @@
 }
 </script>
 <style scoped>
- .list-group-item {
+  .list-group-item {
      color: #ed1d24;
- }
+  }
+
+  .creator-role {
+    color: cornflowerblue;
+  }
 </style>

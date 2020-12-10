@@ -5,12 +5,15 @@ import {public_key,secret_key} from "../marvel";
 import MD5 from "crypto-js/md5";
 
 
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     characters: [],
+    comics: [],
     character: Object,
+    comic: Object,
     timestamp: 1,
     
     
@@ -25,6 +28,14 @@ export default new Vuex.Store({
 
     async fetchCharacter({commit},id) {
         commit('fetchCharacter',id);
+    },
+
+    async fetchComics({commit}){
+        commit('fetchComics');
+    },
+    
+    async fetchComic({commit},id){
+        commit('fetchComic',id);
     }
   },
   mutations: {
@@ -54,6 +65,34 @@ export default new Vuex.Store({
                 console.log(error);
         });
        
+    },
+
+    fetchComics(state){
+      var hash = createHash(state.timestamp);
+      axios.get("http://gateway.marvel.com/v1/public/comics?ts="+ state.timestamp + "&apikey=" + public_key + "&hash=" + hash)    
+      .then((result) => {
+         console.log(result.data.data.results);
+         state.comics = result.data.data.results;
+      
+      })
+      .catch((error) =>{
+          console.log(error);
+      });
+       
+    },
+
+    fetchComic(state,id){
+      var hash = createHash(state.timestamp);
+       
+      axios.get("http://gateway.marvel.com/v1/public/comics/" + id +  "?ts=" + state.timestamp + "&apikey=" + public_key + "&hash=" + hash)    
+           .then((result) => {
+              console.log(result.data.data.results[0]);
+              state.comic = result.data.data.results[0];
+           
+           })
+           .catch((error) =>{
+               console.log(error);
+       });
     }
   },
   
